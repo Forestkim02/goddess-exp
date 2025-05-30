@@ -96,5 +96,24 @@ function handleCodeInput(value) {
       }
     }
   </script>
+  ...
+  </script>
+
+  <!-- 在線人數顯示區塊（新增） -->
+  <div class="fixed bottom-2 right-2 text-sm text-gray-600 bg-white px-3 py-1 rounded shadow">
+    在線人數：<span id="onlineCount">--</span>
+  </div>
+
+  <script>
+    function updateOnlineCount() {
+      const count = Math.floor(Math.random() * 100) + 1;
+      document.getElementById('onlineCount').textContent = count;
+    }
+
+    updateOnlineCount();
+    setInterval(updateOnlineCount, 10000);
+  </script>
+</body>
+
 </body>
 </html>
