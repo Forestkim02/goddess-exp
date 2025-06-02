@@ -1,87 +1,62 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>女神 400 速解</title>
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>女神 400 速解</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
   <div class="bg-white rounded-xl shadow-lg p-6 w-[360px] space-y-1 text-center">
     <h1 class="text-xl font-bold text-blue-700">女神 400 速解</h1>
 
+    <!-- 顯示結果 -->
     <div id="result" class="h-16 bg-blue-50 border border-blue-200 rounded flex items-center justify-center text-xl font-semibold text-blue-700">
       下方輸入數字
     </div>
-<!-- 輸入區塊 -->
-<div class="mb-4">
-  <label for="codeInput" class="block text-sm font-medium text-gray-700 mb-1">直接輸入 4 碼</label>
-  <input id="codeInput" type="text" maxlength="4" placeholder="例如 1102"
-    class="w-full border rounded-md px-3 py-2 text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-    oninput="handleCodeInput(this.value)"
-    onclick="this.value=''; handleCodeInput('')">
-</div>
+
+    <!-- 輸入區塊 -->
+    <div class="mb-4">
+      <label for="codeInput" class="block text-sm font-medium text-gray-700 mb-1">直接輸入 1~4 碼</label>
+      <input id="codeInput" type="text" maxlength="4" placeholder="例如 1102"
+        class="w-full border rounded-md px-3 py-2 text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        oninput="handleCodeInput(this.value)"
+        onclick="this.value=''; handleCodeInput('')">
+    </div>
   </div>
 
   <script>
-const resultMap = {
-  "0011": "211",  "0101": "121",  "0110": "112",  "1011": "022",
-  "1012": "031",  "1021": "013",  "1101": "202",  "1102": "301",
-  "1110": "220",  "1120": "310",  "1201": "103",  "1210": "130",
-  "2112": "004",  "2121": "040",  "2211": "400"
-};
+    const resultMap = {
+      "0011": "211",  "0101": "121",  "0110": "112",  "1011": "022",
+      "1012": "031",  "1021": "013",  "1101": "202",  "1102": "301",
+      "1110": "220",  "1120": "310",  "1201": "103",  "1210": "130",
+      "2112": "004",  "2121": "040",  "2211": "400"
+    };
 
-function handleCodeInput(value) {
-  const output = document.getElementById('result');
-  if (value.length === 4) {
-    if (resultMap[value]) {
-      output.innerText = `${resultMap[value]}`;
-    } else {
-      output.innerText = '無對應結果';
-    }
-  } else {
-    output.innerText = '下方輸入數字';
-  }
-}
+    function handleCodeInput(value) {
+      const output = document.getElementById('result');
 
+      if (value.length === 0) {
+        output.innerText = '下方輸入數字';
+        return;
+      }
 
+      const matches = Object.entries(resultMap)
+        .filter(([key]) => key.startsWith(value))
+        .map(([, result]) => result);
 
-    const state = { empty: null, left: null, center: null, right: null };
-
-    function select(group, value, btn) {
-      state[group] = value;
-
-      const buttons = document.querySelectorAll(`#group-${group} button`);
-      buttons.forEach(b => {
-        b.classList.remove("bg-blue-500", "text-white", "border-blue-700");
-        b.classList.add("bg-white", "text-blue-700", "border-blue-300");
-      });
-
-      btn.classList.remove("bg-white", "text-blue-700", "border-blue-300");
-      btn.classList.add("bg-blue-500", "text-white", "border-blue-700");
-
-      updateResult();
-    }
-
-    function reset() {
-      Object.keys(state).forEach(k => state[k] = null);
-      document.getElementById("result").textContent = "下方輸入數字";
-
-      document.querySelectorAll("button").forEach(btn => {
-        if (!btn.onclick) return;
-        btn.classList.remove("bg-blue-500", "text-white", "border-blue-700");
-        btn.classList.add("bg-white", "text-blue-700", "border-blue-300");
-      });
-    }
-
-    function updateResult() {
-      const { empty, left, center, right } = state;
-      if ([empty, left, center, right].every(v => v !== null)) {
-        const key = `${empty}${left}${center}${right}`;
-        const result = results[key] || '查無對應';
-        document.getElementById("result").textContent = `結果：${result}`;
+      if (value.length === 4) {
+        if (matches.length > 0) {
+          output.innerText = matches[0];
+        } else {
+          output.innerText = '無對應結果';
+        }
       } else {
-        document.getElementById("result").textContent = "下方輸入數字";
+        if (matches.length > 0) {
+          output.innerText = `${matches.join('、')}`;
+        } else {
+          output.innerText = '無可能結果';
+        }
       }
     }
   </script>
